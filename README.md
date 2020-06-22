@@ -10,4 +10,5 @@ It is a React app that leverages the Material Dashboard for React to provide a b
 dashboard widgets and controls.
 
 npm install
+
 npm start
