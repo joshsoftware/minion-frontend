@@ -48,6 +48,8 @@ const UserDashboardServerLogPanel = props => {
   const [rightColumns] = useState(['timestamp'])
   const [pollFlag, setPollFlag] = useState(null)
   const [timerFlag, setTimerFlag] = useState(null)
+  const pollScalingBase = 1
+  const [pollIntervalScalingFactor, setPollIntervalScalingFactor] = useState(pollScalingBase)
 
   const criteriaType = crt => {
     const ary =
@@ -66,6 +68,7 @@ const UserDashboardServerLogPanel = props => {
   // how long it is reasonable to wait for new logs.
   const longSampleExponent = 2 / 3.0
   const midSampleExponent = 0.5
+  const scalingExponent = 0.8
   const shortSampleLimit = 2
   const pollInterval = () => {
     let interval = 60000
@@ -131,11 +134,12 @@ const UserDashboardServerLogPanel = props => {
       }
     }
 
+    const base_interval = intervals.reduce((a, b) => a + b, 0) / intervals.length
+    const scaled_interval = Math.pow(base_interval, scalingExponent) * Math.log10(10 * (Math.pow(1.1, pollIntervalScalingFactor)))
     console.log(
-      ` calculated interval is ${intervals.reduce((a, b) => a + b, 0) /
-        intervals.length}`
+      ` calculated interval is ${scaled_interval}`
     )
-    return intervals.reduce((a, b) => a + b, 0) / intervals.length
+    return scaled_interval
   }
 
   const styles = theme => ({
@@ -201,6 +205,7 @@ const UserDashboardServerLogPanel = props => {
           logData.logs.slice(0, logData.logs.length - data.data.length)
         )
 
+        setPollIntervalScalingFactor(pollScalingBase)
         await setLogData({
           logs: newLogs,
           lastLog: newLogs[0],
@@ -212,6 +217,8 @@ const UserDashboardServerLogPanel = props => {
             }
           })
         })
+      } else {
+        setPollIntervalScalingFactor(pollIntervalScalingFactor + 1)
       }
       console.log('setting timer flag')
       setTimerFlag(Date.now())
