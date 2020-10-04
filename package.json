@@ -1,59 +1,92 @@
 {
-  "name": "material-dashboard-react",
-  "version": "1.8.0",
-  "description": "Material Dashboard React. Coded by Creative Tim",
-  "private": false,
-  "main": "dist/index.js",
+  "name": "minion-by-josh-software",
+  "version": "1.0.0",
+  "title": "Minion by Josh Software, Inc.",
+  "homepage": "http://www.getminion.io",
+  "description": "Monitor performance, identify problems, aggregate logs, and fix issues, all from a single dashboard.",
+  "author": {
+    "name": "Josh Software, Inc.",
+    "url": "https://joshsoftware.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joshsoftware"
+  },
   "dependencies": {
-    "@material-ui/core": "4.3.2",
-    "@material-ui/icons": "4.2.1",
-    "chartist": "0.10.1",
-    "classnames": "2.2.6",
-    "history": "4.9.0",
-    "perfect-scrollbar": "1.4.0",
-    "prop-types": "15.7.2",
-    "react": "16.9.0",
-    "react-chartist": "0.13.3",
-    "react-dom": "16.9.0",
-    "react-google-maps": "9.4.5",
-    "react-router-dom": "5.0.1",
-    "react-scripts": "^3.4.1",
-    "react-swipeable-views": "0.13.3"
+    "@date-io/date-fns": "1.3.13",
+    "@devexpress/dx-react-core": "^2.7.2",
+    "@devexpress/dx-react-grid": "^2.7.2",
+    "@devexpress/dx-react-grid-material-ui": "^2.7.2",
+    "@fortawesome/fontawesome-svg-core": "1.2.27",
+    "@fortawesome/free-brands-svg-icons": "5.12.1",
+    "@fortawesome/free-regular-svg-icons": "5.12.1",
+    "@fortawesome/free-solid-svg-icons": "5.12.1",
+    "@fortawesome/react-fontawesome": "0.1.8",
+    "@material-ui/core": "4.9.2",
+    "@material-ui/icons": "4.5.1",
+    "@material-ui/lab": "4.0.0-alpha.43",
+    "@material-ui/pickers": "3.2.10",
+    "apexcharts": "3.15.6",
+    "axios": "^0.19.2",
+    "chart.js": "2.9.3",
+    "clsx": "1.1.0",
+    "date-fns": "2.9.0",
+    "draft-js": "0.11.4",
+    "draftjs-to-html": "0.9.1",
+    "framer-motion": "1.8.4",
+    "google-map-react": "1.1.6",
+    "hamburgers": "1.1.3",
+    "html-to-draftjs": "01.5.0",
+    "immutability-helper": "3.0.1",
+    "jwt-decode": "^2.2.0",
+    "leaflet": "1.6.0",
+    "libphonenumber-js": "^1.7.57",
+    "pe7-icon": "1.0.4",
+    "react": "16.12.0",
+    "react-apexcharts": "1.3.6",
+    "react-big-calendar": "0.24.0",
+    "react-chartjs-2": "2.9.0",
+    "react-circle": "1.1.1",
+    "react-color": "2.18.0",
+    "react-contextmenu": "2.13.0",
+    "react-copy-to-clipboard": "5.0.2",
+    "react-countup": "4.3.3",
+    "react-cropper": "1.3.0",
+    "react-dnd": "10.0.2",
+    "react-dnd-html5-backend": "10.0.2",
+    "react-dom": "16.12.0",
+    "react-draft-wysiwyg": "1.14.4",
+    "react-dropzone": "10.2.1",
+    "react-feather": "2.0.3",
+    "react-flag-kit": "0.3.1",
+    "react-gauge-chart": "0.2.5",
+    "react-infinite-scroll-component": "5.0.4",
+    "react-ionicons": "3.1.4",
+    "react-joyride": "2.2.1",
+    "react-leaflet": "2.6.1",
+    "react-number-format": "4.3.1",
+    "react-perfect-scrollbar": "1.5.8",
+    "react-redux": "7.2.0",
+    "react-router": "5.1.2",
+    "react-router-dom": "5.1.2",
+    "react-scripts": "3.4.0",
+    "react-slick": "0.25.2",
+    "react-sparklines": "1.7.0",
+    "react-spinners": "0.8.0",
+    "react-text-mask": "5.4.3",
+    "react-trend": "1.2.5",
+    "react-validation": "^3.0.7",
+    "validator": "^13.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
-    "lint:check": "eslint . --ext=js,jsx;  exit 0",
-    "lint:fix": "eslint . --ext=js,jsx --fix;  exit 0",
-    "build-package-css": "cp src/assets/css/material-dashboard-react.css dist/material-dashboard-react.css",
-    "build-package": "npm run build-package-css && babel src --out-dir dist"
+    "format": "./node_modules/.bin/eslint --fix --ignore-path .gitignore ."
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/creativetimofficial/material-dashboard-react.git"
-  },
-  "keywords": [],
-  "author": "Creative Tim <hello@creative-tim.com> (https://www.creative-tim.com/)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/creativetimofficial/material-dashboard-react/issues"
-  },
-  "homepage": "https://creativetimofficial.github.io/material-dashboard-react/#/dashboard",
-  "optionalDependencies": {
-    "@types/googlemaps": "3.37.3",
-    "@types/markerclustererplus": "2.1.33",
-    "ajv": "6.10.2",
-    "typescript": "3.5.3"
-  },
-  "devDependencies": {
-    "eslint-config-prettier": "6.0.0",
-    "eslint-plugin-prettier": "3.1.0",
-    "gulp": "4.0.2",
-    "gulp-append-prepend": "1.0.8",
-    "prettier": "1.18.2"
+  "eslintConfig": {
+    "extends": "react-app"
   },
   "browserslist": {
     "production": [
@@ -61,6 +94,21 @@
       "not dead",
       "not op_mini all"
     ],
-    "development": []
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "6.8.0",
+    "eslint-plugin-prettier": "3.1.2",
+    "eslint-plugin-react": "7.18.3",
+    "eslint-plugin-unused-imports": "0.1.2",
+    "prettier": "1.19.1",
+    "prettier-eslint": "9.0.1",
+    "prettier-eslint-cli": "5.0.0",
+    "node-sass": "4.13.1",
+    "sass-vars-to-js-loader": "2.1.1"
   }
 }
