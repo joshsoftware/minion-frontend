@@ -254,7 +254,7 @@ const UserDashboardServerLogCard = props => {
   }
 
   // Max logging lines data and helper functions.
-  const [maxPoints, setMaxPoints] = useState(500)
+  const [maxPoints, setMaxPoints] = useState(100)
 
   // The list of applied criteria, and related functions.
   const [appliedCriteria, setAppliedCriteria] = useState([])

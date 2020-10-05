@@ -2,8 +2,12 @@ import React, { useState, useEffect } from 'react'
 
 import { Card } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
-
 import Paper from '@material-ui/core/Paper'
+import { makeStyles } from '@material-ui/core/styles'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import Typography from '@material-ui/core/Typography'
+import Box from '@material-ui/core/Box'
+
 import {
   Grid,
   VirtualTable,
@@ -14,11 +18,29 @@ import {
 import { fade } from '@material-ui/core/styles/colorManipulator'
 import { withStyles } from '@material-ui/core/styles'
 
-import ForEach from 'lodash/forEach'
-
 import LogService from '../../services/log.service'
 
 const UserDashboardServerLogPanel = props => {
+  const useStyles = makeStyles({
+    root: {
+      width: '100%',
+      marginBottom: '3px'
+    }
+  })
+
+  const BorderLinearProgress = withStyles(theme => ({
+    colorPrimary: {
+      backgroundColor: '#f4f5fd'
+    },
+    dashedColorPrimary: {
+      backgroundColor: '#f4f5fd'
+    },
+    bar: {
+      backgroundColor: '#f4f5fd'
+    }
+  }))(LinearProgress)
+
+  const progressClasses = useStyles()
   const [loading, setLoading] = useState(true)
   const [selectedRows, setSelectedRows] = useState({})
   const [logData, setLogData] = useState({
@@ -49,7 +71,16 @@ const UserDashboardServerLogPanel = props => {
   const [pollFlag, setPollFlag] = useState(null)
   const [timerFlag, setTimerFlag] = useState(null)
   const pollScalingBase = 1
-  const [pollIntervalScalingFactor, setPollIntervalScalingFactor] = useState(pollScalingBase)
+  const [pollIntervalScalingFactor, setPollIntervalScalingFactor] = useState(
+    pollScalingBase
+  )
+  const [progress, setProgress] = useState(0)
+  const [buffer, setBuffer] = useState(0)
+  const [intervalProgressCounter, setIntervalProgressCounter] = useState(0)
+  const [
+    intervalProgressCounterTarget,
+    setIntervalProgressCounterTarget
+  ] = useState([0, 0])
 
   const criteriaType = crt => {
     const ary =
@@ -134,11 +165,11 @@ const UserDashboardServerLogPanel = props => {
       }
     }
 
-    const base_interval = intervals.reduce((a, b) => a + b, 0) / intervals.length
-    const scaled_interval = Math.pow(base_interval, scalingExponent) * Math.log10(10 * (Math.pow(1.1, pollIntervalScalingFactor)))
-    console.log(
-      ` calculated interval is ${scaled_interval}`
-    )
+    const base_interval =
+      intervals.reduce((a, b) => a + b, 0) / intervals.length
+    const scaled_interval =
+      Math.pow(base_interval, scalingExponent) *
+      Math.log10(10 * Math.pow(1.1, pollIntervalScalingFactor))
     return scaled_interval
   }
 
@@ -158,6 +189,20 @@ const UserDashboardServerLogPanel = props => {
     TableComponentBase
   )
 
+  const progressRef = React.useRef(() => {})
+  useEffect(() => {
+    progressRef.current = () => {
+      const now = Date.now()
+      const percent =
+        ((now - intervalProgressCounterTarget[0]) /
+          (intervalProgressCounterTarget[1] -
+            intervalProgressCounterTarget[0])) *
+        100
+      setBuffer(percent)
+      setProgress(percent)
+    }
+  })
+
   useEffect(() => {
     setLoading(true)
   }, [props.criteria, props.criteriaTrigger])
@@ -165,7 +210,6 @@ const UserDashboardServerLogPanel = props => {
   useEffect(() => {
     const getLogs = async () => {
       const data = await LogService.get(props.server, props.criteria)
-      console.log(data)
       await setLogData({
         logs: data && data.data,
         lastLog: data && data.data[0],
@@ -178,7 +222,6 @@ const UserDashboardServerLogPanel = props => {
         })
       })
       if (!timerFlag) {
-        console.log('SET TIMER FLAG FIRST TIME')
         setTimerFlag(Date.now())
       }
       setLoading(false)
@@ -189,16 +232,15 @@ const UserDashboardServerLogPanel = props => {
     }
   }, [props.criteria, props.criteriaTrigger])
 
+  // Triggered via pollFlag
   useEffect(() => {
     const getLogs = async () => {
-      console.log('getting NEW logs....')
       const data = await LogService.get(
         props.server,
         props.criteria,
         [],
         logData.lastLog[0]
       )
-      console.log(data)
 
       if (data.data && data.data.length > 0) {
         const newLogs = data.data.concat(
@@ -220,15 +262,17 @@ const UserDashboardServerLogPanel = props => {
       } else {
         setPollIntervalScalingFactor(pollIntervalScalingFactor + 1)
       }
-      console.log('setting timer flag')
       setTimerFlag(Date.now())
     }
 
     if (pollFlag && logData.logs.length > 0 && logData.lastLog) {
+      setIntervalProgressCounterTarget([0, 0])
+      clearInterval(intervalProgressCounter)
       getLogs()
     }
   }, [pollFlag])
 
+  // Triggered via timerFlag
   useEffect(() => {
     if (!timerFlag) {
       console.log('Bailing on the initial timer block run')
@@ -236,14 +280,29 @@ const UserDashboardServerLogPanel = props => {
     }
 
     const interval = pollInterval()
+    setBuffer(0)
+    setProgress(0)
+    setIntervalProgressCounterTarget([Date.now(), Date.now() + interval * 1000])
     console.log(`Waiting ${interval} seconds to poll for new data.`)
     const intervalId = setTimeout(() => {
-      console.log('  poking poll flag')
+      progressRef.current()
       setPollFlag(Date.now())
       // clear interval on re-render to avoid memory leaks
       return () => clearInterval(intervalId)
     }, interval * 1000)
   }, [timerFlag])
+
+  useEffect(() => {
+    if (intervalProgressCounterTarget[1]) {
+      // Initialize the counter
+      let progressCounterTimer = setInterval(() => {
+        progressRef.current()
+      }, 333)
+
+      setIntervalProgressCounter(progressCounterTimer)
+      return () => clearInterval(progressCounterTimer)
+    }
+  }, [intervalProgressCounterTarget])
 
   return (
     <>
@@ -258,8 +317,7 @@ const UserDashboardServerLogPanel = props => {
               style={{ height: '300px' }}>
               <span className='ribbon-horizontal ribbon-horizontal--info'>
                 <span>
-                  Logs are Loading:{' '}
-                  {JSON.stringify(props.criteria, undefined, 2)}
+                  Logs are Loading...
                 </span>
               </span>
               <Skeleton
@@ -285,6 +343,28 @@ const UserDashboardServerLogPanel = props => {
       )}
       {criteriaType() && !loading && logData.rows && logData.rows.length > 0 && (
         <Paper>
+          <div className={progressClasses.root}>
+            <Box display='flex' alignItems='center'>
+              <Box width='100%' mr={1}>
+                <BorderLinearProgress
+                  variant='buffer'
+                  value={progress}
+                  valueBuffer={buffer}
+                />
+              </Box>
+              <Box minWidth={85}>
+                <Typography variant='body2' color='textSecondary'>
+                  {intervalProgressCounterTarget[1]
+                    ? `${Math.round(
+                        (intervalProgressCounterTarget[1] -
+                          intervalProgressCounterTarget[0]) /
+                          1000
+                      )} seconds`
+                    : `Polling...`}
+                </Typography>
+              </Box>
+            </Box>
+          </div>
           <Grid
             rows={logData.rows}
             columns={columns}
