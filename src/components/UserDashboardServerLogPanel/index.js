@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
+import IconButton from '@material-ui/core/IconButton'
+import RefreshIcon from '@material-ui/icons/Refresh'
 
 import {
   Grid,
@@ -23,8 +25,7 @@ import LogService from '../../services/log.service'
 const UserDashboardServerLogPanel = props => {
   const useStyles = makeStyles({
     root: {
-      width: '100%',
-      marginBottom: '3px'
+      width: '100%'
     }
   })
 
@@ -76,11 +77,13 @@ const UserDashboardServerLogPanel = props => {
   )
   const [progress, setProgress] = useState(0)
   const [buffer, setBuffer] = useState(0)
-  const [intervalProgressCounter, setIntervalProgressCounter] = useState(0)
+  const [intervalProgressId, setIntervalProgressId] = useState(0)
+  const [pollTimeoutId, setPollTimeoutId] = useState(0)
   const [
     intervalProgressCounterTarget,
     setIntervalProgressCounterTarget
   ] = useState([0, 0])
+  const [refreshTrigger, setRefreshTrigger] = useState(Date.now())
 
   const criteriaType = crt => {
     const ary =
@@ -100,7 +103,7 @@ const UserDashboardServerLogPanel = props => {
   const longSampleExponent = 2 / 3.0
   const midSampleExponent = 0.5
   const scalingExponent = 0.8
-  const shortSampleLimit = 2
+  const shortSampleLimit = 4
   const pollInterval = () => {
     let interval = 60000
     let short_period_interval = interval
@@ -108,7 +111,7 @@ const UserDashboardServerLogPanel = props => {
     let long_period_interval = interval
     if (logData.logs.length > shortSampleLimit) {
       short_period_interval = intervalSample(
-        logData.logs.slice(0, 2).map(item => {
+        logData.logs.slice(0, shortSampleLimit).map(item => {
           return item[4]
         })
       )
@@ -205,7 +208,7 @@ const UserDashboardServerLogPanel = props => {
 
   useEffect(() => {
     setLoading(true)
-  }, [props.criteria, props.criteriaTrigger])
+  }, [props.criteria, props.criteriaTrigger, refreshTrigger])
 
   useEffect(() => {
     const getLogs = async () => {
@@ -221,16 +224,18 @@ const UserDashboardServerLogPanel = props => {
           }
         })
       })
-      if (!timerFlag) {
-        setTimerFlag(Date.now())
-      }
+
+      setTimerFlag(Date.now())
       setLoading(false)
     }
 
     if (criteriaType()) {
+      intervalProgressId && clearInterval(intervalProgressId)
+      pollTimeoutId && clearTimeout(pollTimeoutId)
+      setIntervalProgressCounterTarget([0, 0])
       getLogs()
     }
-  }, [props.criteria, props.criteriaTrigger])
+  }, [props.criteria, props.criteriaTrigger, refreshTrigger])
 
   // Triggered via pollFlag
   useEffect(() => {
@@ -267,7 +272,7 @@ const UserDashboardServerLogPanel = props => {
 
     if (pollFlag && logData.logs.length > 0 && logData.lastLog) {
       setIntervalProgressCounterTarget([0, 0])
-      clearInterval(intervalProgressCounter)
+      intervalProgressId && clearInterval(intervalProgressId)
       getLogs()
     }
   }, [pollFlag])
@@ -287,22 +292,27 @@ const UserDashboardServerLogPanel = props => {
     const intervalId = setTimeout(() => {
       progressRef.current()
       setPollFlag(Date.now())
-      // clear interval on re-render to avoid memory leaks
-      return () => clearInterval(intervalId)
     }, interval * 1000)
+    setPollTimeoutId(intervalId)
+    return () => clearInterval(intervalId)
   }, [timerFlag])
 
   useEffect(() => {
     if (intervalProgressCounterTarget[1]) {
+      const now_id = Date.now()
       // Initialize the counter
       let progressCounterTimer = setInterval(() => {
         progressRef.current()
       }, 333)
 
-      setIntervalProgressCounter(progressCounterTimer)
+      setIntervalProgressId(progressCounterTimer)
       return () => clearInterval(progressCounterTimer)
     }
   }, [intervalProgressCounterTarget])
+
+  const triggerRefresh = () => {
+    setRefreshTrigger(Date.now())
+  }
 
   return (
     <>
@@ -316,9 +326,7 @@ const UserDashboardServerLogPanel = props => {
               className='card-header--title font-size-lg'
               style={{ height: '300px' }}>
               <span className='ribbon-horizontal ribbon-horizontal--info'>
-                <span>
-                  Logs are Loading...
-                </span>
+                <span>Logs are Loading...</span>
               </span>
               <Skeleton
                 style={{ height: '300px' }}
@@ -343,6 +351,11 @@ const UserDashboardServerLogPanel = props => {
       )}
       {criteriaType() && !loading && logData.rows && logData.rows.length > 0 && (
         <Paper>
+          <div>
+            <IconButton aria-label='refresh-logs'>
+              <RefreshIcon onClick={triggerRefresh} />
+            </IconButton>
+          </div>
           <div className={progressClasses.root}>
             <Box display='flex' alignItems='center'>
               <Box width='100%' mr={1}>
