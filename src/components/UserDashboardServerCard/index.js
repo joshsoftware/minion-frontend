@@ -436,10 +436,12 @@ const EnhancedTable = props => {
               onChangeRowsPerPage={handleChangeRowsPerPage}
             />
           </Paper>
-          <FormControlLabel
-            control={<Switch checked={dense} onChange={handleChangeDense} />}
-            label='Dense padding'
-          />
+          <div style={{paddingLeft: "12px"}} className={classes.root}>
+            <FormControlLabel
+              control={<Switch checked={dense} onChange={handleChangeDense} />}
+              label='Compact'
+            />
+	  </div>
         </div>
       </Card>
     </Grid>

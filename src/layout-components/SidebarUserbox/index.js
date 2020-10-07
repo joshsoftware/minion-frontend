@@ -151,7 +151,7 @@ const SidebarUserbox = props => {
               </div>
             </div>
             <div className='d-flex align-items-center'>
-              <div className='font-weight-bold text-success font-size-lg pr-2'>
+              <div className='font-weight-bold text-success font-size-med pr-2'>
                 {logCount ? logCount : 0}
               </div>
             </div>
@@ -163,7 +163,7 @@ const SidebarUserbox = props => {
               </div>
             </div>
             <div className='d-flex align-items-center'>
-              <div className='font-weight-bold text-success font-size-lg pr-2'>
+              <div className='font-weight-bold text-success font-size-med pr-2'>
                 {telemetryCount ? telemetryCount : 0}
               </div>
             </div>
