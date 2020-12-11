@@ -78,7 +78,7 @@ const SidebarCollapsed = props => {
             <div className="sidebar-collapsed-logo">
               <Box
                 className="header-logo-wrapper"
-                title="Minion by Josh Software, Inc.">
+                title="Minion">
                 <Link
                   to="/Home"
                   className="header-logo-wrapper-link">
@@ -88,7 +88,7 @@ const SidebarCollapsed = props => {
                     className="header-logo-wrapper-btn">
                     <img
                       className="app-sidebar-logo"
-                      alt="Minion by Josh Software, Inc."
+                      alt="Minion"
                       src={projectLogo}
                     />
                   </IconButton>

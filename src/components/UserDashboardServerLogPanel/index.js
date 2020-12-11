@@ -156,6 +156,8 @@ const UserDashboardServerLogPanel = props => {
       return null
     }
 
+    timestamps.unshift(Date.now()/1000) // Estimate polling interval from now.
+
     const intervals = []
     for (let idx = 0; idx < timestamps.length - 1; idx++) {
       const now = timestamps[idx]

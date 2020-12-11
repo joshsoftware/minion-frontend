@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 
 import minionLogo from '../../assets/images/logos/minion-on-white.png'
-import joshLogo from '../../assets/images/logos/josh-logo.png'
+import projectLogo from '../../assets/images/logos/Minion-Logo-on-white.png';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -50,13 +50,6 @@ const LandingPage = () => {
                   component={Link}
                   to='/Features'>
                   Features
-                </Button>
-                <Button
-                  color='inherit'
-                  className='btn-inverse px-3 mx-1 py-2 text-capitalize'
-                  component={Link}
-                  to='/Pricing'>
-                  Pricing
                 </Button>
                 <Button
                   color='inherit'
@@ -114,7 +107,7 @@ const LandingPage = () => {
                   <div>
                     <div className='text-black mt-3'>
                       <h1 className='display-2 mb-3 font-weight-bold'>
-                        Josh Software's Minion
+                        Minion
                       </h1>
                       <p className='font-size-lg text-black-50'>
                         You have compute resources running in cloud data
@@ -224,8 +217,8 @@ const LandingPage = () => {
       <div className='bg-first py-5'>
         <div>
           <Container maxWidth='md' className='text-center'>
-            <a href='https://joshsoftware.com' title='Josh Software'>
-              <img alt='Josh Software' src={joshLogo} />
+            <a href='https://github.com/joshsoftware/minion-frontend/blob/master/README.md' title='Minion'>
+              <img alt='Minion' src={minionLogo} />
               <Tooltip
                 arrow
                 placement='right'
@@ -241,7 +234,7 @@ const LandingPage = () => {
             <Tooltip arrow title='Facebook'>
               <IconButton
                 className='nav-link text-white-50'
-                href='https:&#x2F;&#x2F;www.facebook.com&#x2F;UiFort'
+                href='#'
                 rel='noopener nofollow'
                 target='_blank'>
                 <span className='btn-wrapper--icon'>
@@ -255,7 +248,7 @@ const LandingPage = () => {
             <Tooltip arrow title='Twitter'>
               <IconButton
                 className='nav-link text-white-50'
-                href='https:&#x2F;&#x2F;twitter.com&#x2F;uifort1'
+                href='#'
                 rel='noopener nofollow'
                 target='_blank'>
                 <span className='btn-wrapper--icon'>
@@ -269,7 +262,7 @@ const LandingPage = () => {
             <Tooltip arrow title='Github'>
               <IconButton
                 className='nav-link text-white-50'
-                href='https:&#x2F;&#x2F;github.com&#x2F;joshsoftware'
+                href='#'
                 rel='noopener nofollow'
                 target='_blank'>
                 <span className='btn-wrapper--icon'>
@@ -288,9 +281,9 @@ const LandingPage = () => {
               Copyright &copy; {new Date().getFullYear()}&nbsp;-&nbsp;
               <a
                 className='text-white'
-                href='https://joshsoftware.com'
-                title='Josh Software'>
-                Josh Software
+                href='https://github.com/joshsoftware/minion-frontend/blob/master/README.md'
+                title='Minion'>
+                Minion Team
               </a>
             </span>
           </div>

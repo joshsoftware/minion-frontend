@@ -313,11 +313,9 @@ const UserDashboardServerLogCard = props => {
   const [services, setServices] = useState([])
   useEffect(() => {
     const getServices = async () => {
-      console.log('calling get_unique_services')
       const srvc = await LogService.get_unique_services(
         props.selectedServers
       )
-      console.log(srvc)
       setServices(srvc.data)
     }
 

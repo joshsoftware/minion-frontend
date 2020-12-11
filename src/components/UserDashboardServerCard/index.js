@@ -240,7 +240,7 @@ const EnhancedTable = props => {
   const [selected, setSelected] = useState([])
   const [page, setPage] = useState(0)
   const [dense, setDense] = useState(false)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [rowsPerPage, setRowsPerPage] = useState(12)
   const lightRow = [false]
 
   const row_decoration = row => {
@@ -382,7 +382,7 @@ const EnhancedTable = props => {
                 />
                 <TableBody>
                   {stableSort(rows, getComparator(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    //.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map(row => {
                       const isItemSelected = isSelected(row.uuid)
                       const labelId = 'enhanced-table-checkbox'

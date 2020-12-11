@@ -54,7 +54,7 @@ const Header = props => {
           <Hidden lgUp>
             <Box
               className="app-logo-wrapper"
-              title="Minion by Josh Software, Inc.">
+              title="Minion">
               <Link to="/Home" className="app-logo-link">
                 <IconButton
                   color="primary"
@@ -62,7 +62,7 @@ const Header = props => {
                   className="app-logo-btn">
                   <img
                     className="app-logo-img"
-                    alt="Minion by Josh Software, Inc."
+                    alt="Minion"
                     src={projectLogo}
                   />
                 </IconButton>

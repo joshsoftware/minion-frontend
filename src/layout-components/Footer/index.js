@@ -45,11 +45,8 @@ const Footer = props => {
             </List>
           </div> */}
           <div className="app-footer--second">
-            <span>Minion by Josh Software</span> ©
+            <span>Minion</span> ©
 	    { new Date().getFullYear() }{' '}
-            <a href="https://joshsoftware.com" title="joshsoftware.com">
-              joshsoftware.com
-            </a>
           </div>
         </div>
       </Paper>

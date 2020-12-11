@@ -386,7 +386,7 @@ const UserDashboardServerTelemetryCard = props => {
                     {criteria === 'type' &&
                       primaryDataKeys.length > 0 &&
                       primaryDataKeys
-                        .filter(crt => crt.criteria !== 'limit')
+                        .filter(crt => !(["limit", "disk_usage", "meminfo"].includes(crt)))
                         .map(k => (
                           <MenuItem key={k} value={k}>
                             {telemetryTypeNames[k] || k}

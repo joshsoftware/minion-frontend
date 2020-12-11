@@ -38,7 +38,7 @@ const SidebarHeader = props => {
         })}>
         <Box
           className="header-logo-wrapper"
-          title="Minion by Josh Software, Inc.">
+          title="Minion">
           <Link to="/DashboardDefault" className="header-logo-wrapper-link">
             <IconButton
               color="primary"
@@ -46,7 +46,7 @@ const SidebarHeader = props => {
               className="header-logo-wrapper-btn">
               <img
                 className="app-sidebar-logo"
-                alt="Minion by Josh Software, Inc."
+                alt="Minion"
                 src={projectLogo}
               />
             </IconButton>
