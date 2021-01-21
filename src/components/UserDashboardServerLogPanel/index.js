@@ -349,6 +349,11 @@ const UserDashboardServerLogPanel = props => {
               </span>
             </div>
           </div>
+          <div>
+            <IconButton aria-label='refresh-logs'>
+              <RefreshIcon onClick={triggerRefresh} />
+            </IconButton>
+          </div>
         </Card>
       )}
       {criteriaType() && !loading && logData.rows && logData.rows.length > 0 && (
